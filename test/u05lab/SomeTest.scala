@@ -1,6 +1,6 @@
 package u05lab
 
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.{assertEquals, assertThrows}
 import org.junit.jupiter.api.Test
 import u05lab.code._
 
@@ -25,5 +25,12 @@ class SomeTest {
     val l = List("aaaa","bbbbb","c", "dddd", "e")
     assertEquals((List.nil, List.nil), List.nil[AnyRef].span(_ => true))
     assertEquals((List("aaaa","bbbbb"), List("c", "dddd", "e")), l.span(s => s.length > 3))
+  }
+
+  @Test
+  def testReduce() {
+    assertThrows[IllegalStateException](List.nil.reduce(_))
+    assertEquals("a", List("a").reduce(_+_))
+    assertEquals("abc", List("a","b","c").reduce(_+_))
   }
 }
