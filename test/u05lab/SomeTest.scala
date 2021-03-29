@@ -41,6 +41,6 @@ class SomeTest {
   @Test
   def testTakeRight() {
     assertEquals(List.nil, List.nil[AnyRef].takeRight(2))
-    assertEquals(List("b", "c"), List("a", "b", "c").takeRight(2))
+    assertEquals(List("d", "e"), List("a", "b", "c", "d", "e").takeRight(2))
   }
 }
