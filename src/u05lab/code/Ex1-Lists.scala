@@ -140,7 +140,13 @@ trait ListImplementation[A] extends List[A] {
     _partition(this, List.nil, List.nil)
   }
 
-  override def span(pred: A => Boolean): (List[A],List[A]) = ???
+  override def span(pred: A => Boolean): (List[A],List[A]) = {
+    var mem = true
+    this.partition(elem => {
+      mem = mem && pred(elem)
+      mem
+    })
+  }
 
   /**
     *
