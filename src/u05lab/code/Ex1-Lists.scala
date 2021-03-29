@@ -158,7 +158,15 @@ trait ListImplementation[A] extends List[A] {
     case _ => throw new UnsupportedOperationException("list is empty")
   }
 
-  override def takeRight(n: Int): List[A] = ???
+  override def takeRight(n: Int): List[A] = {
+    @tailrec
+    def _takeRight(l: List[A], ptr: List[A], counter: Int): List[A] = l match {
+      case _ :: t if counter > 0 => _takeRight(t, ptr, counter-1)
+      case _ :: t => _takeRight(t, ptr.tail.get, 0)
+      case _ => ptr
+    }
+    _takeRight(this, this, n)
+  }
 }
 
 // Factories
