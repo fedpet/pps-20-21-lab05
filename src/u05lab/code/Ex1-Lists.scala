@@ -39,6 +39,8 @@ sealed trait List[A] {
 
   def takeRight(n: Int): List[A]
 
+  def collect[B](f: PartialFunction[A,B]): List[A]
+
   // right-associative construction: 10 :: 20 :: 30 :: Nil()
   def ::(head: A): List[A] = Cons(head,this)
 
@@ -167,6 +169,8 @@ trait ListImplementation[A] extends List[A] {
     }
     _takeRight(this, this, n)
   }
+
+  override def collect[B](f: PartialFunction[A, B]): List[A] = ???
 }
 
 // Factories

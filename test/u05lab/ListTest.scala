@@ -6,7 +6,7 @@ import org.junit.jupiter.api.function.Executable
 import u05lab.code._
 
 
-class SomeTest {
+class ListTest {
   @Test
   def testZipRight() {
     val l = List("a","b","c")
@@ -42,5 +42,13 @@ class SomeTest {
   def testTakeRight() {
     assertEquals(List.nil, List.nil[AnyRef].takeRight(2))
     assertEquals(List("d", "e"), List("a", "b", "c", "d", "e").takeRight(2))
+  }
+
+  @Test
+  def testCollect() {
+    assertEquals(List.nil, List.nil[AnyRef].collect(_))
+    assertEquals(List(3, 4), List("a", "b", 3, "d", 4).collect {
+      case n: Int => n
+    })
   }
 }
