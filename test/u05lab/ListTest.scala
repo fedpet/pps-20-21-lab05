@@ -46,7 +46,7 @@ class ListTest {
 
   @Test
   def testCollect() {
-    assertEquals(List.nil, List.nil[AnyRef].collect(_))
+    assertEquals(List.nil, List.nil[AnyRef].collect(a => a))
     assertEquals(List(3, 4), List("a", "b", 3, "d", 4).collect {
       case n: Int => n
     })
