@@ -6,7 +6,6 @@ import u05lab.code._
 
 
 class SomeTest {
-
   @Test
   def testZipRight() {
     val l = List("a","b","c")
@@ -16,8 +15,15 @@ class SomeTest {
 
   @Test
   def testPartition() {
-    val l = List("aaaa","bbbbb","c")
+    val l = List("aaaa","bbbbb","c","dddd", "e")
     assertEquals((List.nil, List.nil), List.nil[AnyRef].partition(_ => true))
-    assertEquals((List("aaaa","bbbbb"), List("c")), l.partition(s => s.length > 3))
+    assertEquals((List("aaaa","bbbbb", "dddd"), List("c", "e")), l.partition(s => s.length > 3))
+  }
+
+  @Test
+  def testSpan() {
+    val l = List("aaaa","bbbbb","c", "dddd", "e")
+    assertEquals((List.nil, List.nil), List.nil[AnyRef].span(_ => true))
+    assertEquals((List("aaaa","bbbbb"), List("c", "dddd", "e")), l.span(s => s.length > 3))
   }
 }
