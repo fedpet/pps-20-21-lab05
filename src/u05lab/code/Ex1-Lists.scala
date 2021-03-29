@@ -41,6 +41,8 @@ sealed trait List[A] {
 
   // right-associative construction: 10 :: 20 :: 30 :: Nil()
   def ::(head: A): List[A] = Cons(head,this)
+
+  def :::(el: A): List[A] = append(Cons(el, List.nil))
 }
 
 // defining concrete implementations based on the same template
@@ -115,9 +117,28 @@ trait ListImplementation[A] extends List[A] {
     case Nil() => Nil()
   }
 
-  override def zipRight: List[(A,Int)] = ??? // questions: what is the type of keyword ???
+  override def zipRight: List[(A,Int)] = {
+    @tailrec
+    def _zipRight(l: List[A], k: Int, res: List[(A,Int)]): List[(A,Int)] = l match {
+      case h :: t => _zipRight(t, k+1, (h,k) ::: res)
+      case _ => res
+    }
+    _zipRight(this, 0, List.nil)
+    /*
+    var k = -1
+    this.map(e => { k+=1; (e,k) })
+     */
+  }
 
-  override def partition(pred: A => Boolean): (List[A],List[A]) = ???
+  override def partition(pred: A => Boolean): (List[A],List[A]) = {
+    @tailrec
+    def _partition(l: List[A], res1: List[A], res2: List[A]): (List[A], List[A]) = l match {
+      case h :: t if pred(h) => _partition(t, h ::: res1, res2)
+      case h :: t => _partition(t, res1, h ::: res2)
+      case _ => (res1, res2)
+    }
+    _partition(this, List.nil, List.nil)
+  }
 
   override def span(pred: A => Boolean): (List[A],List[A]) = ???
 
