@@ -2,6 +2,7 @@ package u05lab
 
 import org.junit.jupiter.api.Assertions.{assertEquals, assertThrows}
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.function.Executable
 import u05lab.code._
 
 
@@ -29,7 +30,10 @@ class SomeTest {
 
   @Test
   def testReduce() {
-    assertThrows[UnsupportedOperationException](List.nil.reduce(_))
+    val testReduceNil: Executable = () => {
+      List.nil[AnyRef].reduce((a,_) => a)
+    }
+    assertThrows[UnsupportedOperationException](classOf[UnsupportedOperationException], testReduceNil)
     assertEquals("a", List("a").reduce(_+_))
     assertEquals("abc", List("a","b","c").reduce(_+_))
   }
