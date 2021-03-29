@@ -29,7 +29,7 @@ class SomeTest {
 
   @Test
   def testReduce() {
-    assertThrows[IllegalStateException](List.nil.reduce(_))
+    assertThrows[UnsupportedOperationException](List.nil.reduce(_))
     assertEquals("a", List("a").reduce(_+_))
     assertEquals("abc", List("a","b","c").reduce(_+_))
   }
