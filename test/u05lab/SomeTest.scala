@@ -1,12 +1,23 @@
-package u05lab.code
+package u05lab
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions._
+import u05lab.code._
+
 
 class SomeTest {
 
   @Test
-  def testIncremental() {
-    assert(true)
+  def testZipRight() {
+    val l = List("a","b","c")
+    assertEquals(List.nil, List.nil.zipRight)
+    assertEquals(List(("a",0), ("b",1), ("c",2)), l.zipRight)
+  }
+
+  @Test
+  def testPartition() {
+    val l = List("aaaa","bbbbb","c")
+    assertEquals((List.nil, List.nil), List.nil[AnyRef].partition(_ => true))
+    assertEquals((List("aaaa","bbbbb"), List("c")), l.partition(s => s.length > 3))
   }
 }
