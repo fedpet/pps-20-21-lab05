@@ -37,4 +37,10 @@ class SomeTest {
     assertEquals("a", List("a").reduce(_+_))
     assertEquals("abc", List("a","b","c").reduce(_+_))
   }
+
+  @Test
+  def testTakeRight() {
+    assertEquals(List.nil, List.nil[AnyRef].takeRight(2))
+    assertEquals(List("b", "c"), List("a", "b", "c").takeRight(2))
+  }
 }
