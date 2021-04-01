@@ -73,29 +73,29 @@ class ExamsManagerTest {
   @Test def testExamsManagement() {
     val em = prepareExams()
     // partecipanti agli appelli di gennaio e marzo
-    assertEquals(em.getAllStudentsFromCall("gennaio"), List("rossi", "bianchi", "verdi", "neri"))
-    assertEquals(em.getAllStudentsFromCall("marzo"), List("rossi", "bianchi", "viola"))
+    assertEquals(Set("rossi", "bianchi", "verdi", "neri"), em.getAllStudentsFromCall("gennaio"))
+    assertEquals(Set("rossi", "bianchi", "viola"), em.getAllStudentsFromCall("marzo"))
     // promossi di gennaio con voto
     assertEquals(em.getEvaluationsMapFromCall("gennaio").size, 2)
-    assertEquals(em.getEvaluationsMapFromCall("gennaio").get("verdi"), 28)
-    assertEquals(em.getEvaluationsMapFromCall("gennaio").get("neri"), 30)
+    assertEquals(em.getEvaluationsMapFromCall("gennaio")("verdi"), 28)
+    assertEquals(em.getEvaluationsMapFromCall("gennaio")("neri"), 30)
     // promossi di febbraio con voto
     assertEquals(em.getEvaluationsMapFromCall("febbraio").size, 2)
-    assertEquals(em.getEvaluationsMapFromCall("febbraio").get("bianchi"), 20)
-    assertEquals(em.getEvaluationsMapFromCall("febbraio").get("verdi"), 30)
+    assertEquals(em.getEvaluationsMapFromCall("febbraio")("bianchi"), 20)
+    assertEquals(em.getEvaluationsMapFromCall("febbraio")("verdi"), 30)
     // tutti i risultati di rossi (attenzione ai toString!!)
     assertEquals(em.getResultsMapFromStudent("rossi").size, 3)
-    assertEquals(em.getResultsMapFromStudent("rossi").get("gennaio"), "FAILED")
-    assertEquals(em.getResultsMapFromStudent("rossi").get("febbraio"), "FAILED")
-    assertEquals(em.getResultsMapFromStudent("rossi").get("marzo"), "SUCCEEDED(25)")
+    assertEquals(em.getResultsMapFromStudent("rossi")("gennaio"), "FAILED")
+    assertEquals(em.getResultsMapFromStudent("rossi")("febbraio"), "FAILED")
+    assertEquals(em.getResultsMapFromStudent("rossi")("marzo"), "SUCCEEDED(25)")
     // tutti i risultati di bianchi
     assertEquals(em.getResultsMapFromStudent("bianchi").size, 3)
-    assertEquals(em.getResultsMapFromStudent("bianchi").get("gennaio"), "RETIRED")
-    assertEquals(em.getResultsMapFromStudent("bianchi").get("febbraio"), "SUCCEEDED(20)")
-    assertEquals(em.getResultsMapFromStudent("bianchi").get("marzo"), "SUCCEEDED(25)")
+    assertEquals(em.getResultsMapFromStudent("bianchi")("gennaio"), "RETIRED")
+    assertEquals(em.getResultsMapFromStudent("bianchi")("febbraio"), "SUCCEEDED(20)")
+    assertEquals(em.getResultsMapFromStudent("bianchi")("marzo"), "SUCCEEDED(25)")
     // tutti i risultati di neri
     assertEquals(em.getResultsMapFromStudent("neri").size, 1)
-    assertEquals(em.getResultsMapFromStudent("neri").get("gennaio"), "SUCCEEDED(30L)")
+    assertEquals(em.getResultsMapFromStudent("neri")("gennaio"), "SUCCEEDED(30L)")
   }
 
   // verifica del metodo ExamManager.getBestResultFromStudent
