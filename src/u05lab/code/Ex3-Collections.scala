@@ -3,7 +3,6 @@ package u05lab.code
 import java.util.concurrent.TimeUnit
 import scala.collection.{immutable, mutable}
 import scala.concurrent.duration.FiniteDuration
-import scala.util.Random
 
 object PerformanceUtils {
   case class MeasurementResults[T](result: T, duration: FiniteDuration) extends Ordered[MeasurementResults[_]] {
@@ -112,10 +111,23 @@ object CollectionsTest extends App {
       coll.intersect(testSet)
     }
   })
-  sets.only[mutable.Set[Int]](coll => {
-    val anotherSet = sets.head.map(_ + numElements/2)
+  val testSet = sets.head.map(_ + numElements/2)
+  sets.only[immutable.Set[Int]](coll => {
+    var mutated = coll
     measure(coll.getClass.getCanonicalName + " add") {
-      coll.addAll(anotherSet)
+      testSet.foreach(el => {
+        mutated = mutated + el
+      })
+    }
+    measure(coll.getClass.getCanonicalName + " removed") {
+      elements.foreach(el => {
+        mutated = mutated - el
+      })
+    }
+  })
+  sets.only[mutable.Set[Int]](coll => {
+    measure(coll.getClass.getCanonicalName + " add") {
+      testSet.foreach(coll.add)
     }
     measure(coll.getClass.getCanonicalName + " remove") {
       elements.foreach(coll.remove)
@@ -123,23 +135,44 @@ object CollectionsTest extends App {
   })
 
   /* Maps */
+  val testKeys = elements.map(_.toString)
+  val testEls = testKeys.zipWithIndex
   val maps = scala.List[Seq[(String, Int)] => scala.collection.Map[String, Int]](
     immutable.HashMap.apply[String, Int],
     immutable.TreeMap.apply[String, Int],
     mutable.HashMap.apply[String, Int],
     mutable.TreeMap.apply[String, Int]
-  ).map(create(elements.map(_.toString).zipWithIndex))
+  ).map(create(testEls))
   maps.foreach(iterableQueries)
   maps.foreach(coll => {
     measure(coll.getClass.getCanonicalName + " contains") {
       expensiveReadQueriesRange.map(_.toString).foreach(coll.contains)
     }
   })
-  maps.only[mutable.Map[String, Int]](coll => {
-    val testKeys = elements.map(_.toString)
-    val testEls = testKeys.zipWithIndex
+  maps.only[immutable.Map[String, Int]](coll => {
+    var mutated = coll
     measure(coll.getClass.getCanonicalName + " add") {
-      coll.addAll(testEls)
+      testEls.foreach(entry => {
+        mutated = mutated + entry
+      })
+    }
+    measure(coll.getClass.getCanonicalName + " updated") {
+      testKeys.foreach(k => {
+        mutated = mutated.updated(k, 0)
+      })
+    }
+    measure(coll.getClass.getCanonicalName + " removed") {
+      testKeys.foreach(k => {
+        mutated = mutated.removed(k)
+      })
+    }
+  })
+  maps.only[mutable.Map[String, Int]](coll => {
+    measure(coll.getClass.getCanonicalName + " add") {
+      testEls.foreach(coll.addOne)
+    }
+    measure(coll.getClass.getCanonicalName + " update") {
+      testKeys.foreach(k => coll.update(k, 0))
     }
     measure(coll.getClass.getCanonicalName + " remove") {
       testKeys.foreach(coll.remove)
