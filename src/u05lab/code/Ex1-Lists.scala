@@ -155,8 +155,7 @@ trait ListImplementation[A] extends List[A] {
     * @throws UnsupportedOperationException if the list is empty
     */
   override def reduce(op: (A,A)=>A): A = this match {
-    case h :: t if t.isInstanceOf[Nil[A]] => h
-    case h :: t => op(h, t.reduce(op))
+    case h :: t => t.foldLeft(h)(op)
     case _ => throw new UnsupportedOperationException("list is empty")
   }
 
